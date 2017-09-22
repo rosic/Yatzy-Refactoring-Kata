@@ -61,66 +61,23 @@ class Yatzy
       keys.first.to_i * 3
   end
 
-  def self.smallStraight( d1,  d2,  d3,  d4,  d5)
-    tallies = [0]*6
-    tallies[d1-1] += 1
-    tallies[d2-1] += 1
-    tallies[d3-1] += 1
-    tallies[d4-1] += 1
-    tallies[d5-1] += 1
-    (tallies[0] == 1 and
-      tallies[1] == 1 and
-      tallies[2] == 1 and
-      tallies[3] == 1 and
-      tallies[4] == 1) ? 15 : 0
+  def self.smallStraight(*dice)
+    return 0 if dice.uniq.size < 5
+    return 0 if dice.max > 5
+
+    15
   end
 
-  def self.largeStraight( d1,  d2,  d3,  d4,  d5)
-    tallies = [0]*6
-    tallies[d1-1] += 1
-    tallies[d2-1] += 1
-    tallies[d3-1] += 1
-    tallies[d4-1] += 1
-    tallies[d5-1] += 1
-    if (tallies[1] == 1 and tallies[2] == 1 and tallies[3] == 1 and tallies[4] == 1 and tallies[5] == 1)
-      return 20
-    end
-    return 0
+  def self.largeStraight(*dice)
+    return 0 if dice.uniq.size < 5
+    return 0 if dice.min == 1
+
+    20
   end
 
-  def self.fullHouse( d1,  d2,  d3,  d4,  d5)
-    tallies = []
-    _2 = false
-    i = 0
-    _2_at = 0
-    _3 = false
-    _3_at = 0
+  def self.fullHouse(*dice)
+    return 0 if dice_occurring_more_often_than(dice, 1).size != 2
 
-    tallies = [0]*6
-    tallies[d1-1] += 1
-    tallies[d2-1] += 1
-    tallies[d3-1] += 1
-    tallies[d4-1] += 1
-    tallies[d5-1] += 1
-
-    for i in Array 0..5
-      if (tallies[i] == 2)
-        _2 = true
-        _2_at = i+1
-      end
-    end
-
-    for i in Array 0..5
-      if (tallies[i] == 3)
-        _3 = true
-        _3_at = i+1
-      end
-    end
-
-    if (_2 and _3)
-      return _2_at * 2 + _3_at * 3
-    else
-      return 0
-    end
+    dice.sum
   end
 end

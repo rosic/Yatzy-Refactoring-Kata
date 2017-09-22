@@ -75,16 +75,20 @@ describe Yatzy do
     expect(Yatzy.smallStraight(1,2,3,4,5)).to eq 15
     expect(Yatzy.smallStraight(2,3,4,5,1)).to eq 15
     expect(Yatzy.smallStraight(1,2,2,4,5)).to eq 0
+    expect(Yatzy.smallStraight(2,3,4,6,1)).to eq 0
   end
 
   it "large straight" do
     expect(Yatzy.largeStraight(6,2,3,4,5)).to eq 20
     expect(Yatzy.largeStraight(2,3,4,5,6)).to eq 20
     expect(Yatzy.largeStraight(1,2,2,4,5)).to eq 0
+    expect(Yatzy.largeStraight(1,2,3,4,6)).to eq 0
   end
 
   it "full house" do
     expect(Yatzy.fullHouse(6,2,2,2,6)).to eq 18
     expect(Yatzy.fullHouse(2,3,4,5,6)).to eq 0
+    expect(Yatzy.fullHouse(1,2,2,2,1)).to eq 8
+    expect(Yatzy.fullHouse(1,2,2,2,2)).to eq 0
   end
 end
