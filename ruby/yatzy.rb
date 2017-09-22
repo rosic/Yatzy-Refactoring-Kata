@@ -32,63 +32,33 @@ class Yatzy
   end
 
   def self.score_pair(*dice)
+    dice_occurring_more_often_than(dice, 1).keys.max * 2
+  end
+
+  def self.two_pair(*dice)
+    matching_dice = dice_occurring_more_often_than(dice, 1)
+
+    return 0 if matching_dice.size < 2
+
+    matching_dice.keys.sum * 2
+  end
+
+  def self.four_of_a_kind(*dice)
+    dice_occurring_more_often_than(dice, 3).
+      keys.first.to_i * 4
+  end
+
+  def self.dice_occurring_more_often_than(dice, count)
     dice.group_by(&:itself).map do |k, v|
       [k, v.size]
     end.to_h.select do |k, v|
-      v > 1
-    end.keys.max * 2
-  end
-
-  def self.two_pair( d1,  d2,  d3,  d4,  d5)
-    counts = [0]*6
-    counts[d1-1] += 1
-    counts[d2-1] += 1
-    counts[d3-1] += 1
-    counts[d4-1] += 1
-    counts[d5-1] += 1
-    n = 0
-    score = 0
-    for i in Array 0..5
-      if (counts[6-i-1] >= 2)
-        n = n+1
-        score += (6-i)
-      end
-    end
-    if (n == 2)
-      return score * 2
-    else
-      return 0
+      v > count
     end
   end
 
-  def self.four_of_a_kind( _1,  _2,  d3,  d4,  d5)
-    tallies = [0]*6
-    tallies[_1-1] += 1
-    tallies[_2-1] += 1
-    tallies[d3-1] += 1
-    tallies[d4-1] += 1
-    tallies[d5-1] += 1
-    for i in (0..6)
-      if (tallies[i] >= 4)
-        return (i+1) * 4
-      end
-    end
-    return 0
-  end
-
-  def self.three_of_a_kind( d1,  d2,  d3,  d4,  d5)
-    t = [0]*6
-    t[d1-1] += 1
-    t[d2-1] += 1
-    t[d3-1] += 1
-    t[d4-1] += 1
-    t[d5-1] += 1
-    for i in [0,1,2,3,4,5]
-      if (t[i] >= 3)
-        return (i+1) * 3
-      end
-    end
-    0
+  def self.three_of_a_kind(*dice)
+    dice_occurring_more_often_than(dice, 2).
+      keys.first.to_i * 3
   end
 
   def self.smallStraight( d1,  d2,  d3,  d4,  d5)

@@ -1,5 +1,4 @@
 require_relative './yatzy'
-require 'rspec/autorun'
 
 describe Yatzy do
   it "chance scores sum of all dice" do
