@@ -31,20 +31,12 @@ class Yatzy
     self.class.sixes(*@dice)
   end
 
-  def self.score_pair( d1,  d2,  d3,  d4,  d5)
-    counts = [0]*6
-    counts[d1-1] += 1
-    counts[d2-1] += 1
-    counts[d3-1] += 1
-    counts[d4-1] += 1
-    counts[d5-1] += 1
-    at = 0
-    (0...6).each do |at|
-      if (counts[6-at-1] >= 2)
-        return (6-at)*2
-      end
-    end
-    return 0
+  def self.score_pair(*dice)
+    dice.group_by(&:itself).map do |k, v|
+      [k, v.size]
+    end.to_h.select do |k, v|
+      v > 1
+    end.keys.max * 2
   end
 
   def self.two_pair( d1,  d2,  d3,  d4,  d5)
