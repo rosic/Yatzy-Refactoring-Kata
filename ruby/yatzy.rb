@@ -1,126 +1,34 @@
 class Yatzy
-  def self.chance(d1, d2, d3, d4, d5)
-    total = 0
-    total += d1
-    total += d2
-    total += d3
-    total += d4
-    total += d5
-    return total
+  def self.chance(*dice)
+    dice.take(5).sum
   end
 
   def self.yatzy(dice)
-    counts = [0]*(dice.length+1)
-    for die in dice do
-      counts[die-1] += 1
-    end
-    for i in 0..counts.size do
-      if counts[i] == 5
-        return 50
-      end
-    end
-    return 0
+    return 50 if dice.uniq.size == 1
+
+    0
   end
 
-  def self.ones( d1,  d2,  d3,  d4,  d5)
-    sum = 0
-    if (d1 == 1)
-      sum += 1
+  %i(ones twos threes fours fives sixes).each_with_index do |method, index|
+    define_singleton_method method do |*dice|
+      dice.select { |i| i == index + 1 }.sum
     end
-    if (d2 == 1)
-      sum += 1
-    end
-    if (d3 == 1)
-      sum += 1
-    end
-    if (d4 == 1)
-      sum += 1
-    end
-    if (d5 == 1)
-      sum += 1
-    end
-
-    sum
   end
 
-  def self.twos( d1,  d2,  d3,  d4,  d5)
-    sum = 0
-    if (d1 == 2)
-      sum += 2
-    end
-    if (d2 == 2)
-      sum += 2
-    end
-    if (d3 == 2)
-      sum += 2
-    end
-    if (d4 == 2)
-      sum += 2
-    end
-    if (d5 == 2)
-      sum += 2
-    end
-    return sum
-  end
-
-  def self.threes( d1,  d2,  d3,  d4,  d5)
-    s = 0
-    if (d1 == 3)
-      s += 3
-    end
-    if (d2 == 3)
-      s += 3
-    end
-    if (d3 == 3)
-      s += 3
-    end
-    if (d4 == 3)
-      s += 3
-    end
-    if (d5 == 3)
-      s += 3
-    end
-    return s
-  end
-
-  def initialize(d1, d2, d3, d4, _5)
-    @dice = [0]*5
-    @dice[0] = d1
-    @dice[1] = d2
-    @dice[2] = d3
-    @dice[3] = d4
-    @dice[4] = _5
+  def initialize(*dice)
+    @dice = dice
   end
 
   def fours
-    sum = 0
-    for at in Array 0..4
-      if (@dice[at] == 4)
-        sum += 4
-      end
-    end
-    return sum
+    self.class.fours(*@dice)
   end
 
-  def fives()
-    s = 0
-    i = 0
-    for i in (Range.new(0, @dice.size))
-      if (@dice[i] == 5)
-        s = s + 5
-      end
-    end
-    s
+  def fives
+    self.class.fives(*@dice)
   end
 
   def sixes
-    sum = 0
-    for at in 0..@dice.length
-      if (@dice[at] == 6)
-        sum = sum + 6
-      end
-    end
-    return sum
+    self.class.sixes(*@dice)
   end
 
   def self.score_pair( d1,  d2,  d3,  d4,  d5)
